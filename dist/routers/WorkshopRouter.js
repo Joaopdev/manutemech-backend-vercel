@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const WorkshopController_1 = require("../controllers/WorkshopController");
+const authenticationMiddleware_1 = require("../middlewares/authenticationMiddleware");
+const router = (0, express_1.Router)();
+const workshopController = new WorkshopController_1.WorkshopController();
+router.get('/workshops', authenticationMiddleware_1.authenticate, workshopController.getAllWorkshops);
+router.post('/workshops', authenticationMiddleware_1.authenticate, workshopController.createWorkshop);
+router.get('/workshops/:id', authenticationMiddleware_1.authenticate, workshopController.getWorkshopById);
+router.put('/workshops/:id', authenticationMiddleware_1.authenticate, workshopController.updateWorkshop);
+router.delete('/workshops/:id', authenticationMiddleware_1.authenticate, workshopController.deleteWorkshop);
+exports.default = router;

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const MaintenancePartController_1 = require("../controllers/MaintenancePartController");
+const authenticationMiddleware_1 = require("../middlewares/authenticationMiddleware");
+const router = (0, express_1.Router)();
+const maintenancePartController = new MaintenancePartController_1.MaintenancePartController();
+router.post('/maintenance-parts', authenticationMiddleware_1.authenticate, maintenancePartController.createMaintenancePart);
+router.get('/maintenance-parts/:id', authenticationMiddleware_1.authenticate, maintenancePartController.getMaintenancePartById);
+router.put('/maintenance-parts/:id', authenticationMiddleware_1.authenticate, maintenancePartController.updateMaintenancePart);
+router.delete('/maintenance-parts/:id', authenticationMiddleware_1.authenticate, maintenancePartController.deleteMaintenancePart);
+exports.default = router;

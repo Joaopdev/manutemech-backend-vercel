@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id             Int           @id @default(autoincrement())
+  manufacturer   String
+  model          String
+  year           Int
+  chassis_number String
+  renavam        String
+  licence_plate  String        @unique
+  maintenances   Maintenance[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User?         @relation(fields: [userId], references: [id])
+  userId         Int?
+}
+
+model Maintenance {
+  id                   Int                  @id @default(autoincrement())
+  entry_date           DateTime
+  exits_date           DateTime
+  km_vehicle           Int
+  responsible_mechanic String
+  maintenance_price    Float
+  remarks              String
+  vehicle              Vehicle              @relation(fields: [vehicleId], references: [id])
+  vehicleId            Int
+  parts                MaintenancePart[]
+  services             MaintenanceService[]
+  workshop             Workshop             @relation(fields: [workshopId], references: [id])
+  workshopId           Int
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  user                 User?                @relation(fields: [userId], references: [id])
+  userId               Int?
+}
+
+model Part {
+  id                       Int               @id @default(autoincrement())
+  name                     String
+  description              String?
+  maintenance              MaintenancePart[]
+  category                 Category          @relation(fields: [categoryId], references: [id])
+  categoryId               Int
+  estimated_price          Float
+  warranty_duration_months Int
+  model_specification      String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  user                     User?             @relation(fields: [userId], references: [id])
+  userId                   Int?
+}
+
+model Supplier {
+  id          Int               @id @default(autoincrement())
+  name        String
+  remarks     String?
+  address     String
+  maintenance MaintenancePart[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User?             @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  services    Service[]
+  parts       Part[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Service {
+  id                          Int                  @id @default(autoincrement())
+  name                        String
+  description                 String?
+  category                    Category             @relation(fields: [categoryId], references: [id])
+  categoryId                  Int
+  review_estimate_months      Int
+  maintenance_estimate_months Int
+  km_review_estimate          Int
+  km_maintenance_estimate     Int
+  maintenances                MaintenanceService[]
+  createdAt                   DateTime             @default(now())
+  updatedAt                   DateTime             @updatedAt
+  user                        User?                @relation(fields: [userId], references: [id])
+  userId                      Int?
+}
+
+model Workshop {
+  id                 Int           @id @default(autoincrement())
+  name               String
+  workshop_type      String
+  address            String
+  responsible_person String
+  phone_number       String
+  maintenances       Maintenance[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  user               User?         @relation(fields: [userId], references: [id])
+  userId             Int?
+}
+
+model MaintenanceService {
+  maintenance   Maintenance @relation(fields: [maintenanceId], references: [id])
+  maintenanceId Int
+  service       Service     @relation(fields: [serviceId], references: [id])
+  serviceId     Int
+
+  @@id([maintenanceId, serviceId])
+}
+
+model MaintenancePart {
+  id            Int         @id @default(autoincrement())
+  maintenance   Maintenance @relation(fields: [maintenanceId], references: [id])
+  maintenanceId Int
+  part          Part        @relation(fields: [partId], references: [id])
+  partId        Int
+  supplier      Supplier    @relation(fields: [supplierId], references: [id])
+  supplierId    Int
+  price         Float
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Vehicle     Vehicle[]
+  Maintenance Maintenance[]
+  Part        Part[]
+  Supplier    Supplier[]
+  Category    Category[]
+  Service     Service[]
+  Workshop    Workshop[]
+}
