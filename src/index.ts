@@ -44,20 +44,20 @@ app.get('/', (req, res) => {
 
 
 const port = 4000; // Escolha a porta que deseja usar para o servidor
-app.use(cors({
-  origin: (origin, callback) => {
-    // Verifica se a origem está autorizada (frontend)
-    if (
-      origin === 'https://manutemech-app.vercel.app/' ||
-      origin?.startsWith('https://manutemech-app.vercel.app/')
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Acesso CORS bloqueado.'));
-    }
-  },
-}));
 
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+
+})
+
+
+app.use((req, res, next) => {
+  res.setHeader('Referrer-Policy', 'same-origin');
+  next();
+});
 
 // Middleware para análise do corpo das requisições
 app.use(bodyParser.json());
