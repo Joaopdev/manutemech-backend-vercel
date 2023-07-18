@@ -44,9 +44,9 @@ app.get('/', (req, res) => {
 
 
 const port = 4000; // Escolha a porta que deseja usar para o servidor
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: process.env.ORIGIN }));
 app.use((req, res, next) => {
-  res.setHeader('Referrer-Policy', 'same-origin');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   next();
 });
 
