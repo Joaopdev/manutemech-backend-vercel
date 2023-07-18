@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "start": "cross-env NODE_ENV=development node server.js",
-    "vercel-build": "npx prisma migrate deploy",
-    "postinstall": "prisma generate"
+    "vercel-build": "npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
