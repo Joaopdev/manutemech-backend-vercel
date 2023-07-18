@@ -57,10 +57,7 @@ app.use(cors({
     }
   },
 }));
-app.use((req, res, next) => {
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  next();
-});
+
 
 // Middleware para análise do corpo das requisições
 app.use(bodyParser.json());
