@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 
 
 const port = 4000; // Escolha a porta que deseja usar para o servidor
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: 'https://manutemech-app.vercel.app/' || 'http://localhost:3000' }));
 app.use((req, res, next) => {
   res.setHeader('Referrer-Policy', 'same-origin');
   next();
