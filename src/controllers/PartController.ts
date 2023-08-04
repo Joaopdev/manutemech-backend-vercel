@@ -113,8 +113,8 @@ export class PartController {
         return res.status(403).json({ error: 'Unauthorized' });
       }
       return res.sendStatus(204);
-    } catch (error) {
-      return res.status(500).json({ error: 'Failed to delete part' });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }

@@ -107,8 +107,8 @@ export class SupplierController {
         return res.status(401).json({ error: 'Unauthorized' });
 
       return res.sendStatus(204);
-    } catch (error) {
-      return res.status(500).json({ error: 'Failed to delete supplier' });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }
