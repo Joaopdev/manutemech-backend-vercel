@@ -36,7 +36,7 @@ try {
     },
   });
 
-  return res.status(201).json(user);
+  return res.status(201).json({name, email});
 } catch (error: any) {
   return res.status(400).json({ error: error.message });
 }
