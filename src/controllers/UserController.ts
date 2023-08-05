@@ -17,19 +17,30 @@ export class UserController {
 }
   
 
-  async createUser(req: AuthenticatedRequest, res: Response): Promise<Response> {
-    const { name, email, password } = req.body;
+async createUser(req: AuthenticatedRequest, res: Response): Promise<Response> {
+  
+  const { name, email, password, acceptedTerms, acceptedPrivacy } = req.body;
 
-    try {
-      const hashedPassword = await hashPassword(password);
+try {
+  // Faça a hash da senha
+  const hashedPassword = await hashPassword(password);
 
-      const user = await prisma.user.create({ data: {name, email, password: hashedPassword} });
-      
-      return res.status(201).json(user);
-    } catch (error: any) {
-      return res.status(400).json({ error: "Não autorizado!" });
-    }
-  }
+  // Crie o usuário com os novos campos
+  const user = await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      acceptedTerms,
+      acceptedPrivacy,
+    },
+  });
+
+  return res.status(201).json(user);
+} catch (error: any) {
+  return res.status(400).json({ error: error.message });
+}
+}
 
   async getUserById(req: AuthenticatedRequest, res: Response): Promise<Response> {
     const userId = Number(req.userId)
@@ -55,10 +66,10 @@ export class UserController {
 
   async updateUser(req: AuthenticatedRequest, res: Response): Promise<Response> {
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { name, email, password, acceptedTerms, acceptedPrivacy } = req.body;
     const userId = Number(req.userId)
 
-    const userData = { name, email, password };
+    const userData = { name, email, password, acceptedTerms, acceptedPrivacy };
 
     try {
       const updatedUser = await prisma.user.update({ where: { id: parseInt(id) }, data: userData });
@@ -70,7 +81,7 @@ export class UserController {
         return res.status(401).json({ error: 'Unauthorized' })
       }
 
-      return res.json(updatedUser);
+      return res.json({name, email});
     } catch (error) {
       return res.status(400).json({ error: 'Failed to update user' });
     }
