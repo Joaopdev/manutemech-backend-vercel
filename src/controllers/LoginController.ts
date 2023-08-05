@@ -37,7 +37,7 @@ class LoginController {
 
 
       // Retornar o token como resposta
-      return res.json({ token, user });
+      return res.json({ token, email  });
         
     } catch (error) {
       console.error('Erro no login:', error);
