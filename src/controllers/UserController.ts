@@ -66,7 +66,10 @@ export class UserController {
                 return res.status(401).json({ error: "Unauthorized" });
             }
 
-            return res.json(user);
+            const { password, ...userWithoutPassword } = user;
+
+            console.log(userWithoutPassword);
+            return res.json(userWithoutPassword);
         } catch (error) {
             return res.status(500).json({ error: "Failed to fetch user" });
         }
